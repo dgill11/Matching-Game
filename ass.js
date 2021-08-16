@@ -5,7 +5,7 @@ const planets = [
 ]
 
 var  cardpicked = [];
-var cardids = [];
+var  cardids = [];
 
 let score = 0;
 
@@ -18,7 +18,7 @@ function settingupgrid() {
         var newimg  = document.createElement('img');
         console.log(randomizedarray[i]);
         newimg.setAttribute('src', randomizedarray[i]);
-        newimg.setAttribute('id', randomizedarray[i]);
+        newimg.setAttribute('id', (i + 1));
         newimg.addEventListener('click', flip);
         document.getElementById("grid").appendChild(newimg);
         var abc = document.querySelectorAll("img");
@@ -30,36 +30,37 @@ function settingupgrid() {
     }
 }
 
-// Push cards selected to cardpicked array, and if there are two items in the array, then clear the array.
-// If the two cards are the same, then proceed to both delete the cards from the array, as well as to delete the 
-
 function flip() {
-    let source = this.getAttribute('src');
-    let id = this.getAttribute('id');
+    var source = this.getAttribute('src');  
+    var id1 = this.getAttribute('id');
+    console.log(id1);
+    console.log(cardids)
 
-    this.setAttribute('src', id);
-
-    cardids.push(id);
+    cardids.push(id1);
     cardpicked.push(source);
-    console.log(cardids);
 
-    if (cardids[0] === cardids[1]) {
+    if (source[0] === source[1]) {
         console.log("we have found a match");
         score++;
         document.getElementById("score").innerHTML = score;
-        console.log(score);
+        var y = document.getElementById(cardids[0]);
+        var z = document.getElementById(cardids[1]);
+        y.removeEventListener('click', flip);
+        z.removeEventListener('click', flip);
     }
     if (cardids.length > 2) {
         console.log("thearrayisfull");
         var images = document.querySelectorAll("img");
         setTimeout(2000);
         for (let y = 0; y < images.length; y++) {
+            console.log(images[y]);
             if (images[y].getAttribute('src') != "whitesquare.png") {
                 images[y].setAttribute('src', "whitesquare.png");
                 console.log("Changed images back.");
             }
         }
-        cardids = [];
+        cardids.length = 0;
+        cardpicked.length = 0;
     }
 }
 
