@@ -6,9 +6,9 @@ const planets = [
 
 var  cardpicked = [];
 var cardids = [];
+var names = [];
 
 let score = 0;
-
 var randomizedarray = planets.sort((a, b) => 0.5 - Math.random());
 
 function settingupgrid() {
@@ -18,13 +18,14 @@ function settingupgrid() {
         var newimg  = document.createElement('img');
         console.log(randomizedarray[i]);
         newimg.setAttribute('src', randomizedarray[i]);
-        newimg.setAttribute('id', randomizedarray[i]);
+        newimg.setAttribute('id', (i + 1));
+        newimg.setAttribute('name', randomizedarray[i]);
         newimg.addEventListener('click', flip);
         document.getElementById("grid").appendChild(newimg);
         var abc = document.querySelectorAll("img");
         for (let x = 0; x < abc.length; x++) {
             setTimeout(function() {
-                abc[x].setAttribute('src', "whitesquare.png");
+                abc[x].setAttribute('src', "quesitonmark.png");
             }, 3000)
         }
     }
@@ -36,31 +37,45 @@ function settingupgrid() {
 function flip() {
     let source = this.getAttribute('src');
     let id = this.getAttribute('id');
+    let actualsource = this.getAttribute('name');
 
-    this.setAttribute('src', id);
+    this.setAttribute('src', actualsource);
 
     cardids.push(id);
     cardpicked.push(source);
+    names.push(actualsource);
     console.log(cardids);
 
-    if (cardids[0] === cardids[1]) {
+    if (names[0] === names[1]) {
         console.log("we have found a match");
         score++;
         document.getElementById("score").innerHTML = score;
         console.log(score);
-        
+        var y = document.getElementById(cardids[0]);
+        var z = document.getElementById(cardids[1]);
+        y.removeEventListener('click', flip);
+        z.removeEventListener('click', flip);
+        setTimeout(function() {
+           y.remove();
+           z.remove();
+        }, 2000)
+        cardids.length = 0;
+        names.length = 0;
+        console.log(cardids);
     }
     if (cardids.length > 2) {
         console.log("thearrayisfull");
         var images = document.querySelectorAll("img");
         setTimeout(2000);
         for (let y = 0; y < images.length; y++) {
-            if (images[y].getAttribute('src') != "whitesquare.png") {
-                images[y].setAttribute('src', "whitesquare.png");
+            if (images[y].getAttribute('src') !="quesitonmark.png") {
+                images[y].setAttribute('src', "quesitonmark.png");
                 console.log("Changed images back.");
             }
         }
-        cardids = [];
+        cardids.length = 0;
+        names.length = 0;
+        cardpicked.length = 0;
     }
 }
 
